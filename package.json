@@ -15,7 +15,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "format:schema": "prisma format --schema database/schema.prisma",
-    "migrations:up": "prisma migrate dev --schema src/engines/database/schema.prisma",
+    "migrations:up": "prisma migrate dev --schema database/schema.prisma",
     "generate:queries": "pgtyped -c pg-typed.config.json",
     "seed": "tsnd -r tsconfig-paths/register --transpile-only --ignore-watch node_modules src/scripts/seed.script.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

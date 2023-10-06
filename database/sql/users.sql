@@ -78,3 +78,17 @@ SET
     "updatedAt" = :updatedAt
 where
     "id" = :id;
+
+/* 
+ @name listUsersWithRoles
+ @param roles -> (...) 
+ */
+SELECT
+    "users"."id"
+from
+    "users"
+    INNER JOIN "user_roles" on "user_roles"."userId" = "users"."id"
+where
+    "user_roles"."role" in :roles
+group by
+    "users"."id";

@@ -4,6 +4,7 @@ import { Request } from 'express';
 
 export class RestHandlerInstrumentation extends AbstractInstrumentation {
   setRequest(request: Request) {
+    this._setSession(request);
     const subContext = this._log.getSubContext('request');
     const { ip, method, params, path, query, url } = this._extractRequestLog(request);
     subContext.set('path', path);
@@ -12,6 +13,21 @@ export class RestHandlerInstrumentation extends AbstractInstrumentation {
     subContext.set('params', params);
     subContext.set('query', query);
     subContext.set('url', url);
+  }
+
+  private _setSession(request: any) {
+    const { session } = request;
+    const subContext = this._log.getSubContext('session');
+
+    if (!session) return subContext.set('status', false);
+
+    subContext.set('status', true);
+    subContext.set('id', session.id.value);
+    subContext.set('type', session.type);
+    subContext.set('issuedAt', session.issuedAt.format());
+    subContext.set('expireAt', session.expireAt.format());
+    subContext.set('roles', Array.from(session.roles.values()));
+    subContext.set('permissions', session.permissions.size);
   }
 
   private _extractRequestLog(request: Request) {

@@ -1,3 +1,4 @@
+import { Milliseconds } from '../time/milliseconds.class';
 import { DATE_FORMAT } from './date-format.enum';
 import { TDateInterval } from './date-interval.type';
 import { FormatStrategyHandler } from './format-strategies/format-strategy.handler';
@@ -21,6 +22,19 @@ export class DateTime {
     return new DateTime(new Date(date));
   }
 
+  static increment(date: Date | DateTime, milliseconds: Milliseconds): DateTime {
+    const input = DateTime._toDate(date);
+    const timestamp = input.getTime() + milliseconds.value;
+    return new DateTime(new Date(timestamp));
+  }
+
+  static decrement(date: Date | DateTime, milliseconds: Milliseconds): DateTime {
+    const input = DateTime._toDate(date);
+    const timestamp = input.getTime() - milliseconds.value;
+
+    return new DateTime(new Date(timestamp));
+  }
+
   isBetween(interval: TDateInterval): boolean {
     const { begin, end } = interval;
     if (this.isAfter(begin) && this.isBefore(end)) return true;
@@ -28,16 +42,19 @@ export class DateTime {
     return false;
   }
 
-  isAfter(date: Date): boolean {
-    return this.timestamp() > date.getTime();
+  isAfter(date: Date | DateTime): boolean {
+    const input = DateTime._toDate(date);
+    return this.timestamp() > input.getTime();
   }
 
-  isBefore(date: Date): boolean {
-    return this.timestamp() < date.getTime();
+  isBefore(date: Date | DateTime): boolean {
+    const input = DateTime._toDate(date);
+    return this.timestamp() < input.getTime();
   }
 
-  isEqual(date: Date): boolean {
-    return this.timestamp() === date.getTime();
+  isEqual(date: Date | DateTime): boolean {
+    const input = DateTime._toDate(date);
+    return this.timestamp() === input.getTime();
   }
 
   format(format?: DATE_FORMAT): string {
@@ -46,5 +63,9 @@ export class DateTime {
 
   timestamp(): number {
     return this.value.getTime();
+  }
+
+  private static _toDate(date: Date | DateTime): Date {
+    return date instanceof DateTime ? date.value : date;
   }
 }

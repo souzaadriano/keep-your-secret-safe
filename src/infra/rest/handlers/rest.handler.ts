@@ -25,7 +25,7 @@ export class RestHandler {
     const instrumentation = new RestHandlerInstrumentation(Log.create(useCase.context), logger);
     try {
       instrumentation.setRequest(this._request);
-      const input = await this._getInput<INPUT>(instrumentation.getLog());
+      const input = await this._getInput<INPUT>(instrumentation.getLog().getSubContext('use-case'));
       const output = await useCase.execute(input);
       instrumentation.setStatus(200);
       instrumentation.emit();
@@ -57,9 +57,12 @@ export class RestHandler {
   private async _getInput<INPUT>(log: Log): Promise<TStandardInput<INPUT>> {
     const input: TStandardInput<INPUT> = this._Schema ? plainToInstance(this._Schema, this._buildInput()) : {};
     const invalidInputs = this._Schema ? await validate(input) : [];
+
     input.log = log;
-    input.session = this._request['session'] ?? null;
+    input.session = this._request['session'];
+
     if (invalidInputs.length) throw new InvalidInputException(invalidInputs);
+
     return input;
   }
 

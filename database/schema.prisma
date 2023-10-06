@@ -20,11 +20,10 @@ model Permissions {
 }
 
 model Roles {
-  id              String            @id
-  name            String            @unique
+  name            String            @id
   description     String
   createdAt       DateTime          @default(now())
-  updateAt        DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
   deletedAt       DateTime?
   RolePermissions RolePermissions[]
   UserRoles       UserRoles[]
@@ -33,22 +32,23 @@ model Roles {
 }
 
 model RolePermissions {
-  roleId       String
+  role         String
   permissionId String
-  role         Roles       @relation(fields: [roleId], references: [id])
-  permissions  Permissions @relation(fields: [permissionId], references: [id])
 
-  @@id([roleId, permissionId])
+  roles       Roles       @relation(fields: [role], references: [name])
+  permissions Permissions @relation(fields: [permissionId], references: [id])
+
+  @@id([role, permissionId])
   @@map("role_permissions")
 }
 
 model UserRoles {
-  roleId String
+  role   String
   userId String
-  role   Roles  @relation(fields: [roleId], references: [id])
+  roles  Roles  @relation(fields: [role], references: [name])
   user   Users  @relation(fields: [userId], references: [id])
 
-  @@id([roleId, userId])
+  @@id([role, userId])
   @@map("user_roles")
 }
 
