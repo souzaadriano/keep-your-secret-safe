@@ -1,4 +1,4 @@
-import { Milliseconds } from '../time/milliseconds.class';
+import { Time } from '../time/time.class';
 import { DATE_FORMAT } from './date-format.enum';
 import { TDateInterval } from './date-interval.type';
 import { FormatStrategyHandler } from './format-strategies/format-strategy.handler';
@@ -22,13 +22,13 @@ export class DateTime {
     return new DateTime(new Date(date));
   }
 
-  static increment(date: Date | DateTime, milliseconds: Milliseconds): DateTime {
+  static increment(date: Date | DateTime, milliseconds: Time): DateTime {
     const input = DateTime._toDate(date);
     const timestamp = input.getTime() + milliseconds.value;
     return new DateTime(new Date(timestamp));
   }
 
-  static decrement(date: Date | DateTime, milliseconds: Milliseconds): DateTime {
+  static decrement(date: Date | DateTime, milliseconds: Time): DateTime {
     const input = DateTime._toDate(date);
     const timestamp = input.getTime() - milliseconds.value;
 

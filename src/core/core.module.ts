@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ExampleModule } from './example/example.module';
-import { PermissionsModule } from './permission/permissions.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [ExampleModule, PermissionsModule],
-  exports: [ExampleModule, PermissionsModule],
+  imports: [ExampleModule, UserModule],
+  exports: [ExampleModule, UserModule],
 })
 export class CoreModule {}

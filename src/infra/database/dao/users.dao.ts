@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PgTypedEngine } from '../adapters/engine/pgtyped/pg-typed-engine.adapter';
 import {
+  IFindByIdResult,
   createUser,
   findByEmail,
   findById,
@@ -9,6 +10,9 @@ import {
   softDeleteUser,
   updateUser,
 } from '../queries/users.queries';
+
+export type * from '../queries/users.queries';
+export type TUserModel = IFindByIdResult;
 
 @Injectable()
 export class UsersDAO {

@@ -1,3 +1,13 @@
 export class Email {
-  readonly value: string;
+  private static readonly _validate = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/;
+  constructor(private readonly _value: string) {}
+
+  static create(value: string): Email {
+    if (Email._validate.test(value)) return new Email(value);
+    throw new Error();
+  }
+
+  get value(): string {
+    return this._value;
+  }
 }

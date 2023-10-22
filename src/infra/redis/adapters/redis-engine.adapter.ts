@@ -1,4 +1,4 @@
-import { Milliseconds } from '@/core/shared/class/time/milliseconds.class';
+import { Time } from '@/core/shared/class/time/milliseconds.class';
 import { TGenericInterval } from '@/core/shared/types/generic-interval.type';
 import { TJsonDocument } from '@/core/shared/types/json-document.type';
 import { Injectable } from '@nestjs/common';
@@ -9,7 +9,7 @@ import { IRedisEngine } from './redis-engine.contract';
 export class RedisEngine implements IRedisEngine {
   constructor(private readonly _engine: RedisConnector) {}
 
-  async set(key: string, value: string, ttl?: Milliseconds): Promise<void> {
+  async set(key: string, value: string, ttl?: Time): Promise<void> {
     ttl ? await this._engine.engine.set(key, value, 'PX', ttl.value) : await this._engine.engine.set(key, value);
   }
 
@@ -31,7 +31,7 @@ export class RedisEngine implements IRedisEngine {
     return await this._engine.engine.lrange(key, interval.begin ?? 0, interval.end ?? -1);
   }
 
-  async setBuffer(key: string, value: Buffer, ttl?: Milliseconds): Promise<void> {
+  async setBuffer(key: string, value: Buffer, ttl?: Time): Promise<void> {
     ttl ? await this._engine.engine.set(key, value, 'PX', ttl.value) : await this._engine.engine.set(key, value);
   }
 
@@ -39,7 +39,7 @@ export class RedisEngine implements IRedisEngine {
     return (await this._engine.engine.getBuffer(key)) ?? null;
   }
 
-  async setJson(key: string, value: TJsonDocument, ttl?: Milliseconds): Promise<void> {
+  async setJson(key: string, value: TJsonDocument, ttl?: Time): Promise<void> {
     await this.set(key, JSON.stringify(value));
   }
 
@@ -53,7 +53,7 @@ export class RedisEngine implements IRedisEngine {
     await this._engine.engine.del(key);
   }
 
-  async refresh(key: string, ttl: Milliseconds, type: 'SUM' | 'SET' = 'SET'): Promise<void> {
+  async refresh(key: string, ttl: Time, type: 'SUM' | 'SET' = 'SET'): Promise<void> {
     if (type === 'SET') {
       await this._engine.engine.pexpire(key, ttl.value);
     } else {
@@ -63,9 +63,9 @@ export class RedisEngine implements IRedisEngine {
     }
   }
 
-  async ttl(key: string): Promise<Milliseconds> {
+  async ttl(key: string): Promise<Time> {
     const currentTtl = await this._engine.engine.pttl(key);
-    return new Milliseconds(currentTtl);
+    return new Time(currentTtl);
   }
 
   async has(key: string): Promise<boolean> {

@@ -1,0 +1,6 @@
+export enum PASSWORD_STRENGTH {
+  STRONG = 'STRONG',
+  MEDIUM = 'MEDIUM',
+  WEAK = 'WEAK',
+  NONE = 'NONE',
+}

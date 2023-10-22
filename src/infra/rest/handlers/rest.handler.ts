@@ -46,6 +46,7 @@ export class RestHandler {
     body.reduce((result, data) => this._setProp(result, data), result);
     params.reduce((result, data) => this._setProp(result, data), result);
     query.reduce((result, data) => this._setProp(result, data), result);
+
     return result;
   }
 

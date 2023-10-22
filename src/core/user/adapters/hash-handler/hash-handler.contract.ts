@@ -1,4 +1,6 @@
+import { Password } from '@/core/user/domain/class/password/password.class';
+
 export interface IHashHandler {
-  make(value: string): Promise<string>;
-  validate(value: string, hash: string): Promise<boolean>;
+  hash(password: string): Promise<string>;
+  validate(hash: string, value: string): Promise<boolean>;
 }
